@@ -103,8 +103,6 @@ with st.container():
             txt_clr = (0, 0, 255)
         elif text_colour == "White":
             txt_clr = (255, 255, 255)
-        elif text_colour == "Black":
-            txt_clr = (0, 0, 0)
 
         font_size = st.number_input(
             "Enter the font size of text 👇",
@@ -118,7 +116,7 @@ with st.container():
             I1 = ImageDraw.Draw(rgb_image)
 
             font = ImageFont.truetype('font/arial.ttf', font_size)    
-            I1.text(tuple_val, text_input, font = font, fill = txt_clr, stroke_width=3, stroke_fill='black')
+            I1.text(tuple_val, text_input, font = font, fill = txt_clr, stroke_width=1, stroke_fill='black')
             st.image(rgb_image, caption = 'uploaded_image')
             region, num_chars, num_words = text_region(coords, text_input, font_size)
             buf = BytesIO()
