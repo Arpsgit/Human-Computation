@@ -9,32 +9,27 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from image_db import img_db, Base
 
+engine = create_engine(os.environ.get("DATABASE_URL"))
+Base.metadata.create_all(engine)
+Session = sessionmaker(bind = engine)
+sess = Session()
+
 st.set_page_config(
     page_title = "image annotation",
     page_icon = ":frame_with_picture:",
     layout = "wide",
 )
 
-'''engine = create_engine(os.environ.get("DATABASE_URL"))
-Base.metadata.create_all(engine)
-Session = sessionmaker(bind = engine)
-sess = Session()'''
-
-'''st.set_page_config(
-    page_title = "image annotation",
-    page_icon = ":frame_with_picture:",
-    layout = "wide",
-)'''
-
 
 def text_region(coord, text, size):
     text_length = len(text)
-    num_words = len(text.split(sep=" "))
-    x0 = coord['x']
-    y0 = coord['y']
-    x1 = x0 + (size * (text_length+1) / 2)
-    y1 = y0 + size
-    return [(x0, y0), (x1, y1)]
+    num_word = len(text.split(sep=" "))
+    num_char = len(text.replace(" ", ""))
+    x1 = coord['x']
+    y1 = coord['y']
+    x2 = x1 + (size * (text_length+1) / 2)
+    y2 = y1 + size
+    return [x1, y1, x2, y2], num_char, num_word
 
 
 with st.container():
@@ -114,7 +109,7 @@ with st.container():
         font_size = st.number_input(
             "Enter the font size of text 👇",
             key = int,
-            min_value = 5, 
+            min_value = 10,
             step = 1
         )
 
@@ -124,9 +119,8 @@ with st.container():
 
             font = ImageFont.truetype('font/arial.ttf', font_size)    
             I1.text(tuple_val, text_input, font = font, fill = txt_clr, stroke_width=3, stroke_fill='black')
-            I1.rectangle(xy=text_region(coords, text_input, font_size), fill=None, outline='green', width= 3)
             st.image(rgb_image, caption = 'uploaded_image')
-
+            region, num_chars, num_words = text_region(coords, text_input, font_size)
             buf = BytesIO()
             rgb_image.save(buf, format = "JPEG")
             byte_im = buf.getvalue()
@@ -139,10 +133,17 @@ with st.container():
 
             submit = st.button("submit image")
             if submit:
-                '''try:
+                try:
                     entry = img_db(
                         user_name = user_name_input,
-                        file_name = uploaded_image.name,
+                        file_name = image_choice,
+                        coord_x1 = region[0],
+                        coord_y1 = region[1],
+                        coord_x2 = region[2],
+                        coord_y2 = region[3],
+                        number_of_letters = num_chars,
+                        number_of_words = num_words,
+                        font_size=font_size,
                         img = byte_im
                     )
                     sess.add(entry)
@@ -150,6 +151,6 @@ with st.container():
                     st.success("Successful Submission :cow:")
                     st.snow()
                 except Exception as e:
-                    st.error(f"Error Occured {e}")'''
+                    st.error(f"Error Occurred {e}")
         else:
             pass
