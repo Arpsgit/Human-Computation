@@ -93,7 +93,7 @@ with st.container():
         )
         text_colour = st.radio(
             "select the colour of text",
-            ("Red", "Green", "Blue", "White", "Black")
+            ("Red", "Green", "Blue", "White")
         )
         if text_colour == 'Red':
             txt_clr = (255, 0, 0)
