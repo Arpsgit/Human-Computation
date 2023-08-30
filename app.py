@@ -53,20 +53,18 @@ with st.container():
 with st.container():
     st.write("---")
     image_choice = image_select(label='Select an image',
-                                images=["image/Ancient-Aliens.jpg",
-                                        "image/Disaster-Girl.jpg",
-                                        "image/Distracted-Boyfriend.jpg",
-                                        "image/Laughing-Leo.png",
-                                        "image/Mocking-Spongebob.jpg",
-                                        "image/Roll-Safe-Think-About-It.jpg",
-                                        "image/Success-Kid.jpg"],
-                                captions=['Ancient-Aliens',
-                                          'Disaster-Girl',
-                                          'Distracted-Boyfriend',
-                                          'Laughing-Leo',
-                                          'Mocking-Spongebob',
-                                          'Roll-Safe-Think-About-It',
-                                          'Success-Kid'])
+                                images=["actual_image/1.jpg",
+                                        "actual_image/2.jpg",
+                                        "actual_image/3.jpg",
+                                        "actual_image/4.jpg",
+                                        "actual_image/5.jpg",
+                                        "actual_image/6.jpg"],
+                                captions=['Will Smith',
+                                          'Salt Bae',
+                                          'Listening',
+                                          'Disgusting',
+                                          'Dabbing',
+                                          'Memestine Chapel'])
 
     if image_choice:
         image = Image.open(image_choice)
